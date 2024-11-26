@@ -10,7 +10,7 @@ import { User } from "src/user/entities/user.entity";
   imports: [
     MongooseModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: async (configService: ConfigService) => ({
         dbName: configService.get("MONGODB_DB_NAME"),
         uri: configService.get("MONGODB_URI"),
       }),
