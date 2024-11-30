@@ -37,7 +37,7 @@ export class PostService {
     const foundPosts = await this.postModel.find(query).lean();
 
     return {
-      posts: Promise.all(
+      posts: await Promise.all(
         foundPosts.map(async (post) => {
           const user = await this.userRepository.find({
             where: { user_id: Number(post.userId) },

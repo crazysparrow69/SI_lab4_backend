@@ -13,6 +13,11 @@ export class PostController {
     return this.postService.create(userId, body);
   }
 
+  @Get("all")
+  getAllPosts() {
+    return this.postService.get();
+  }
+
   @Get(':id')
   getOne(@Param("id") id: string) {
     return this.postService.getOne(id);
@@ -21,11 +26,6 @@ export class PostController {
   @Get()
   getUserPosts(@CurrentUser() userId: string) {
     return this.postService.get({ userId });
-  }
-
-  @Get("all")
-  getAllPosts() {
-    return this.postService.get();
   }
 
   @Delete(":id")
