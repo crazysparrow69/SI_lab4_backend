@@ -19,10 +19,10 @@ export class PostService {
   
     const createdPostData = createdPost.toObject();
   
-    const user = await this.userRepository.find({
+    const user = (await this.userRepository.find({
       where: { user_id: Number(createdPostData.userId) },
       relations: ['user_role_id', 'user_level_id'],
-    });
+    }))[0];
   
     return {
       ...createdPostData,
@@ -36,9 +36,10 @@ export class PostService {
       throw new NotFoundException('Post not found');
     }
 
-    const user = await this.userRepository.find({
+    const user = (await this.userRepository.find({
       where: { user_id: Number(foundPost.userId) },
-    });
+      relations: ['user_role_id', 'user_level_id'],
+    }))[0];
 
     return {
       ...foundPost,
