@@ -37,6 +37,12 @@ export class UserController {
     return this.userService.createLevel(body);
   }
 
+  @Post("awards")
+  createAward(@Body() body) {
+    return this.userService.createAward(body);
+  }
+
+  @UseGuards(AuthGuard)
   @Get("awards")
   getAwards(@CurrentUser() userId: string) {
     return this.userService.getAwardsForUser(userId);

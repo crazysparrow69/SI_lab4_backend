@@ -28,7 +28,7 @@ export class UserService {
     if (!email || !password) {
       throw new UnauthorizedException('Email and password are required');
     }
-    
+
     const foundUser = await this.userRepository.findOne({
       where: { email, password },
     });
@@ -54,7 +54,11 @@ export class UserService {
       throw new BadRequestException('User with this email already exists');
     }
 
-    const createdUser = await this.userRepository.save(user);
+    const createdUser = await this.userRepository.save({
+      ...user,
+      user_level_id: 5,
+      user_role_id: 6
+    });
 
     const token = await this.jwtService.signAsync(
       {
@@ -76,7 +80,10 @@ export class UserService {
   }
 
   async update(user_id: number, data: Partial<User>) {
-    const userToUpdate = await this.userRepository.preload({ user_id, ...data });
+    const userToUpdate = await this.userRepository.preload({
+      user_id,
+      ...data,
+    });
     if (!userToUpdate) {
       throw new NotFoundException('User not found');
     }
