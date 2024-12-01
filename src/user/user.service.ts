@@ -80,14 +80,17 @@ export class UserService {
   }
 
   async update(user_id: number, data: Partial<User>) {
-    const userToUpdate = await this.userRepository.preload({
-      user_id,
-      ...data,
+    const userToUpdate = await this.userRepository.findOne({
+      where: { user_id },
+      relations: ['user_role_id', 'user_level_id'],
     });
+  
     if (!userToUpdate) {
       throw new NotFoundException('User not found');
     }
-
+  
+    Object.assign(userToUpdate, data);
+  
     return this.userRepository.save(userToUpdate);
   }
 

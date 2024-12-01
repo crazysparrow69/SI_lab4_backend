@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { UserRole } from './user-role.entity';
 import { UserLevel } from './user-level.entity';
 
@@ -16,9 +16,11 @@ export class User {
   @Column()
   password: string;
 
-  @OneToOne(() => UserRole, (role) => role.user_role_id)
+  @ManyToOne(() => UserRole, (role) => role.user_role_id, { nullable: true })
+  @JoinColumn({ name: 'user_role_id' })
   user_role_id?: UserRole;
 
-  @OneToOne(() => UserLevel, (level) => level.user_level_id)
+  @ManyToOne(() => UserLevel, (level) => level.user_level_id, { nullable: true })
+  @JoinColumn({ name: 'user_level_id' })
   user_level_id?: UserLevel;
 }
