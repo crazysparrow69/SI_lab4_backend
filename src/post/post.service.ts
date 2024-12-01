@@ -16,14 +16,16 @@ export class PostService {
 
   async create(userId: string, post) {
     const createdPost = await this.postModel.create({ userId, ...post });
-  
+
     const createdPostData = createdPost.toObject();
-  
-    const user = (await this.userRepository.find({
-      where: { user_id: Number(createdPostData.userId) },
-      relations: ['user_role_id', 'user_level_id'],
-    }))[0];
-  
+
+    const user = (
+      await this.userRepository.find({
+        where: { user_id: Number(createdPostData.userId) },
+        relations: ['user_role_id', 'user_level_id'],
+      })
+    )[0];
+
     return {
       ...createdPostData,
       user,
@@ -36,10 +38,12 @@ export class PostService {
       throw new NotFoundException('Post not found');
     }
 
-    const user = (await this.userRepository.find({
-      where: { user_id: Number(foundPost.userId) },
-      relations: ['user_role_id', 'user_level_id'],
-    }))[0];
+    const user = (
+      await this.userRepository.find({
+        where: { user_id: Number(foundPost.userId) },
+        relations: ['user_role_id', 'user_level_id'],
+      })
+    )[0];
 
     return {
       ...foundPost,
@@ -48,11 +52,13 @@ export class PostService {
   }
 
   async get(query) {
-    const foundPosts = await this.postModel.find().lean();
+    const foundPosts = await this.postModel
+      .find({ ...(query.userId ? { userId: query.userId } : {}) })
+      .lean();
 
     const userIds = foundPosts.map((post) => Number(post.userId));
     let users = await this.userRepository.find({
-      where: { user_id: In(userIds)},
+      where: { user_id: In(userIds) },
       relations: ['user_role_id', 'user_level_id'],
     });
 
@@ -60,7 +66,9 @@ export class PostService {
       users = users.filter((user) => user.user_role_id.name === query.userRole);
     }
     if (query.userLevel) {
-      users = users.filter((user) => user.user_level_id.name === query.userLevel);
+      users = users.filter(
+        (user) => user.user_level_id.name === query.userLevel,
+      );
     }
 
     const userMap = new Map(users.map((user) => [user.user_id, user]));
@@ -69,7 +77,7 @@ export class PostService {
       user: userMap.get(Number(post.userId)),
     }));
     const filteredPosts = postsWithUser.filter((post) => post.user);
-  
+
     return {
       posts: filteredPosts,
       count: filteredPosts.length,
