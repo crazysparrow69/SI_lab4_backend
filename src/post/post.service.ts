@@ -16,13 +16,15 @@ export class PostService {
 
   async create(userId: string, post) {
     const createdPost = await this.postModel.create({ userId, ...post });
-
+  
+    const createdPostData = createdPost.toObject();
+  
     const user = await this.userRepository.find({
-      where: { user_id: Number(createdPost.userId) },
+      where: { user_id: Number(createdPostData.userId) },
     });
-
+  
     return {
-      ...createdPost,
+      ...createdPostData,
       user,
     };
   }
@@ -70,7 +72,7 @@ export class PostService {
       posts: filteredPosts,
       count: filteredPosts.length,
     };
-  }  
+  }
 
   async delete(id: string) {
     return this.postModel.findOneAndDelete({ _id: id });
