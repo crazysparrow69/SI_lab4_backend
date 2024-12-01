@@ -14,8 +14,17 @@ export class PostService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  create(userId: string, post) {
-    return this.postModel.create({ userId, ...post });
+  async create(userId: string, post) {
+    const createdPost = await this.postModel.create({ userId, ...post });
+
+    const user = await this.userRepository.find({
+      where: { user_id: Number(createdPost.userId) },
+    });
+
+    return {
+      ...createdPost,
+      user,
+    }; 
   }
 
   async getOne(id: string) {
@@ -27,6 +36,7 @@ export class PostService {
     const user = await this.userRepository.find({
       where: { user_id: Number(foundPost.userId) },
     });
+
     return {
       ...foundPost,
       user,
