@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -57,7 +62,7 @@ export class UserService {
     const createdUser = await this.userRepository.save({
       ...user,
       user_level_id: 5,
-      user_role_id: 6
+      user_role_id: 6,
     });
 
     const token = await this.jwtService.signAsync(
@@ -71,7 +76,10 @@ export class UserService {
   }
 
   async getOne(user_id: number) {
-    const foundUser = await this.userRepository.findOne({ where: { user_id } });
+    const foundUser = await this.userRepository.findOne({
+      where: { user_id },
+      relations: ['user_role_id', 'user_level_id'],
+    });
     if (!foundUser) {
       throw new NotFoundException('User not found');
     }
@@ -84,13 +92,13 @@ export class UserService {
       where: { user_id },
       relations: ['user_role_id', 'user_level_id'],
     });
-  
+
     if (!userToUpdate) {
       throw new NotFoundException('User not found');
     }
-  
+
     Object.assign(userToUpdate, data);
-  
+
     return this.userRepository.save(userToUpdate);
   }
 
