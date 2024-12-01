@@ -21,6 +21,7 @@ export class PostService {
   
     const user = await this.userRepository.find({
       where: { user_id: Number(createdPostData.userId) },
+      relations: ['user_role_id', 'user_level_id'],
     });
   
     return {
