@@ -8,6 +8,7 @@ import { UserLevel } from './entities/user-level.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Award, AwardSchema } from './awards.schema';
+import { Background } from 'src/image/entities/background.entity';
 
 @Module({
   imports: [

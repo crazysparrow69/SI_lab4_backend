@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PostModule } from './post/post.module';
 import * as dotenv from 'dotenv';
+import { ImageModule } from './image/image.module';
 dotenv.config();
 
 @Module({
@@ -25,6 +26,7 @@ dotenv.config();
     UserModule,
     DatabaseModule,
     PostModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

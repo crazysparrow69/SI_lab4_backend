@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { Background } from "src/image/entities/background.entity";
 import { UserLevel } from "src/user/entities/user-level.entity";
 import { UserRole } from "src/user/entities/user-role.entity";
 import { User } from "src/user/entities/user.entity";
@@ -25,7 +26,7 @@ import { User } from "src/user/entities/user.entity";
         password: configService.get("MYSQL_PASSWORD"),
         database: configService.get("MYSQL_DATABASE"),
         synchronize: true,
-        entities: [User, UserRole, UserLevel],
+        entities: [User, UserRole, UserLevel, Background],
       }),
     }),
   ],

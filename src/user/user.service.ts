@@ -78,7 +78,7 @@ export class UserService {
   async getOne(user_id: number) {
     const foundUser = await this.userRepository.findOne({
       where: { user_id },
-      relations: ['user_role_id', 'user_level_id'],
+      relations: ['user_role_id', 'user_level_id', 'background_id'],
     });
     if (!foundUser) {
       throw new NotFoundException('User not found');
@@ -90,7 +90,7 @@ export class UserService {
   async update(user_id: number, data: Partial<User>) {
     const userToUpdate = await this.userRepository.findOne({
       where: { user_id },
-      relations: ['user_role_id', 'user_level_id'],
+      relations: ['user_role_id', 'user_level_id', 'background_id'],
     });
 
     if (!userToUpdate) {
