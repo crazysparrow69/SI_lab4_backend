@@ -95,7 +95,7 @@ export class ImageService {
     const savedBackground = await this.backgroundRepository.save(newBackground);
 
     user.background_id = savedBackground.background_id as unknown as Background;
-    console.log(user);
+
     await this.userRepository.save(user);
 
     if (background) {
